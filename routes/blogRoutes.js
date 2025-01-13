@@ -3,29 +3,22 @@ const Blog = require('../models/Blog');
 const router = express.Router();
 
 // Get all blogs
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-
+router.get('/', async (req, res) => {
     try {
-        const blog = await Blog.findById(id);
-
-        if (!blog) {
-            return res.status(404).json({ error: 'Blog not found' });
-        }
-
-        res.json(blog);
+        const blogs = await Blog.find(); // Fetch all blogs from MongoDB
+        res.json(blogs); // Send blogs as JSON response
     } catch (err) {
-        res.status(500).json({ error: 'Error fetching blog', details: err.message });
+        res.status(500).json({ error: 'Error fetching blogs', details: err.message });
     }
 });
 
 // Create a new blog
 router.post('/', async (req, res) => {
-    console.log('Incoming Request Body:', req.body); // Debug the request body
+    console.log('Incoming Request Body:', req.body); // Debugging
 
     const { title, content, author } = req.body;
 
-    // Validate fields
+    // Validate required fields
     if (!title || !content || !author) {
         return res.status(400).json({ error: 'All fields (title, content, author) are required.' });
     }
@@ -35,7 +28,7 @@ router.post('/', async (req, res) => {
         const savedBlog = await newBlog.save();
         res.status(201).json(savedBlog);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(500).json({ error: 'Failed to save blog', details: err.message });
     }
 });
 

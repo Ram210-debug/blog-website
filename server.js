@@ -7,8 +7,8 @@ const app = express();
 const PORT = 4000;
 
 // Middleware
-app.use(express.json()); // Parses incoming JSON requests
-app.use(cors());         // Enables Cross-Origin Resource Sharing
+app.use(express.json()); // Parses JSON request bodies
+app.use(cors());         // Allows frontend-backend communication
 
 // MongoDB Connection
 mongoose.connect('mongodb://127.0.0.1:27017/blogDB')
